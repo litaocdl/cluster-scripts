@@ -1,0 +1,36 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-with-basebackup
+spec:
+  instances: 3
+
+  primaryUpdateStrategy: unsupervised
+
+  # Persistent storage configuration
+  storage:
+    storageClass: standard
+    size: 1Gi
+
+  bootstrap:
+    pg_basebackup:
+      source: backup-example-1
+
+  externalClusters:
+    - name: backup-example-1
+    barmanObjectStore:
+      destinationPath: s3://cluster-backups/
+      endpointURL: http://minio-service.minio:9000
+      s3Credentials:
+        accessKeyId:
+          name: minio-secrets
+          key: ACCESS_KEY
+        secretAccessKey:
+          name: minio-secrets
+          key: ACCESS_SECRET
+      wal:
+        compression: gzip
+      data:
+        immediateCheckpoint: true
+    retentionPolicy: "30d"
+

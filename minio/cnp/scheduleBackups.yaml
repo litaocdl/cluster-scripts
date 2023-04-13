@@ -1,0 +1,9 @@
+apiVersion: postgresql.k8s.enterprisedb.io/v1
+kind: ScheduledBackup
+metadata:
+  name: schedule-backup-example-1
+spec:
+  cluster:
+    name: pg-with-backup
+  immediate: true
+  schedule: 0 0 * * * *

@@ -1,0 +1,22 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-with-restore
+spec:
+  instances: 3
+
+  primaryUpdateStrategy: unsupervised
+
+  # Persistent storage configuration
+  storage:
+    storageClass: standard
+    size: 1Gi
+
+  bootstrap:
+    recovery:
+      backup: 
+        name: backup-example-1
+
+
+
+
